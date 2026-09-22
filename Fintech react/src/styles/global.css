@@ -1,0 +1,43 @@
+@import './themes.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Reset base estendido pelo Tailwind ── */
+
+@layer base {
+  body {
+    @apply bg-background text-on-background font-body-md antialiased;
+    overscroll-behavior: none;
+  }
+
+  /* Remove as setas de inputs number no Chrome, Safari, Edge, Opera */
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Remove as setas de inputs number no Firefox */
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+}
+
+@layer utilities {
+  /* Ocultar scrollbar (Stitch style) */
+  .no-scrollbar::-webkit-scrollbar { 
+    display: none; 
+  }
+  .no-scrollbar { 
+    scrollbar-width: none; 
+  }
+
+  /* ── Background Global para Telas que precisavam de Pattern ── */
+  .page-background {
+    background-image: url('../assets/Pattern.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+}

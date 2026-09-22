@@ -1,0 +1,72 @@
+services:
+
+  # ─────────────────────────────────────────────────────────────
+  # 1. Banco de Dados PostgreSQL
+  # ─────────────────────────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: poupyg-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: fintech
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5433:5432"       # Expõe na porta 5433 para evitar conflito com PostgreSQL local
+    volumes:
+      - postgres_data:/var/lib/postgresql/data   # Persiste os dados entre restarts
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d fintech"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ─────────────────────────────────────────────────────────────
+  # 2. Backend Spring Boot
+  # ─────────────────────────────────────────────────────────────
+  backend:
+    container_name: poupyg-backend
+    build:
+      context: ./fintechNovo
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    environment:
+      # Aponta para o serviço "postgres" definido acima (nome do container no docker network)
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: fintech
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      JWT_SECRET: minha-chave-secreta-super-segura-local-2024
+    depends_on:
+      postgres:
+        condition: service_healthy   # Só sobe depois que o Postgres estiver saudável
+
+  # ─────────────────────────────────────────────────────────────
+  # 3. Frontend React (Vite)
+  # ─────────────────────────────────────────────────────────────
+  frontend:
+    container_name: poupyg-frontend
+    build:
+      context: ./Fintech react
+      dockerfile: Dockerfile.dev
+    restart: unless-stopped
+    ports:
+      - "5173:5173"
+    volumes:
+      # Hot-reload: sincroniza o código local com o container
+      - ./Fintech react/src:/app/src
+      - ./Fintech react/public:/app/public
+    environment:
+      - CHOKIDAR_USEPOLLING=true   # Garante hot-reload no Windows/WSL
+    depends_on:
+      - backend
+
+# ─────────────────────────────────────────────────────────────
+# Volumes persistentes
+# ─────────────────────────────────────────────────────────────
+volumes:
+  postgres_data:
+    driver: local
