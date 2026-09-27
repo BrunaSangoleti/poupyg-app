@@ -6,24 +6,24 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "T_DESPESA")
+@Table(name = "t_despesa")
 public class Despesa {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "ID_DESPESA")
+    @Column(name = "id_despesa")
     private java.util.UUID id;
 
-    @Column(name = "DS_DESPESA")
+    @Column(name = "ds_despesa")
     private String descricao;
 
-    @Column(name = "VL_DESPESA")
+    @Column(name = "vl_despesa")
     private BigDecimal valor;
 
-    @Column(name = "DT_DESPESA")
+    @Column(name = "dt_despesa")
     private LocalDate data;
 
-    @Column(name = "DS_CATEGORIA")
+    @Column(name = "ds_categoria")
     private String categoria;
 
     @ManyToOne
