@@ -31,12 +31,7 @@ interface TransacaoLocal extends Omit<FinanceItem, 'tipo'> {
   tipo: TipoLocal;
 }
 
-interface ModalConfig {
-  open: boolean;
-  endpoint: string;
-  label: string;
-  placeholder: string;
-}
+
 
 export const Dashboard = () => {
   const { getUsuario, isAuthenticated } = useAuth();

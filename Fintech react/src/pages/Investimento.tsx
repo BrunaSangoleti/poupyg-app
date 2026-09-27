@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import Modal from '../components/Modal';
@@ -23,7 +23,6 @@ export const Investimento = () => {
     const [loading, setLoading] = useState(true);
     const [erro, setErro] = useState<string | null>(null);
 
-    const [modalConfig, setModalConfig] = useState<{ open: boolean, type: 'investimento' }>({ open: false, type: 'investimento' });
     const [modalAberto, setModalAberto] = useState(false);
 
     // Estado de edição
